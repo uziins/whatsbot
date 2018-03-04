@@ -1,0 +1,3 @@
+blinker
+git+https://github.com/AragurDEV/yowsup.git
+pymysql
