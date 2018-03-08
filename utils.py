@@ -169,9 +169,10 @@ class MySQL:
     def init_database(self):
         if not self.db_host or not self.db_name or not self.db_user or not self.db_password:
             sys.exit("Need to specify mysql config")
-        self.db_query("CREATE DATABASE IF NOT EXISTS '{}';".format(self.db_name), "commit")
-        t_user = self.db_query("SHOW TABLES LIKE 'user'")
-        if not t_user:
+        if not self.db_query("SHOW DATABASES LIKE '{}'".format(self.db_name)):
+            self.db_query("CREATE DATABASE IF NOT EXISTS {} CHARACTER SET utf8mb4 "
+                          "COLLATE utf8mb4_unicode_ci;".format(self.db_name), "commit")
+        if not self.db_query("SHOW TABLES LIKE 'user'"):
             print("Attempting to create table 'user'")
             self.db_query("CREATE TABLE IF NOT EXISTS user("
                           "user_id VARCHAR(50) PRIMARY KEY, "
@@ -180,8 +181,7 @@ class MySQL:
                           "user_type VARCHAR(10),"
                           "updated_at DATETIME,"
                           "created_at TIMESTAMP DEFAULT current_timestamp NOT NULL)ENGINE = INNODB", "commit")
-        t_preference = self.db_query("SHOW TABLES LIKE 'preference'")
-        if not t_preference:
+        if not self.db_query("SHOW TABLES LIKE 'preference'"):
             print("Attempting to create table 'preference'")
             self.db_query("CREATE TABLE IF NOT EXISTS preference("
                           "id INT PRIMARY KEY AUTO_INCREMENT,"

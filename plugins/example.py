@@ -12,7 +12,7 @@ plugin = {
     "desc": "For example",
     "usage": ["/example"],
     "run": run,
-    "sudo": True,
+    "sudo": False,
     "patterns": [
         "^[!/#](example)$",
     ],
